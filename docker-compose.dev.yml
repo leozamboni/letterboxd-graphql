@@ -1,0 +1,41 @@
+version: "3.8"
+services:
+  api:
+      container_name: letterboxd-graphql-api
+      build: .
+      ports:
+          - "3000:3000"
+      volumes:
+          - .:/home/api
+          - /home/api/node_modules
+      networks:
+          - letterboxd-graphql-network
+
+  pgadmin:
+      container_name: letterboxd-graphql-pgadmin
+      image: dpage/pgadmin4
+      restart: unless-stopped
+      environment:
+          PGADMIN_DEFAULT_EMAIL: 'admin@admin.com'
+          PGADMIN_DEFAULT_PASSWORD: root
+      ports:
+          - 16543:80
+      depends_on:
+          - postgres
+      networks:
+          - letterboxd-graphql-network
+
+  postgres:
+      container_name: letterboxd-graphql-postgres
+      image: postgres:latest
+      ports:
+          - "3500:5432"
+      environment:
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: root
+          POSTGRES_DB: db
+      networks:
+          - letterboxd-graphql-network
+
+networks:
+  letterboxd-graphql-network:
