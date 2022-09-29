@@ -3,6 +3,7 @@ services:
   api:
       container_name: letterboxd-graphql-api
       build: .
+      command: bash -c "pnpm install; pnpm start:dev"
       ports:
           - "3000:3000"
       volumes:
